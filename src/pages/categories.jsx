@@ -12,7 +12,7 @@ export default function Categories() {
 
   return (
     <div>
-      {/* En-tête */}
+      {/* en tete */}
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-2xl font-bold text-[#2D2D2D]">Catégories</h2>
@@ -24,7 +24,7 @@ export default function Categories() {
         </button>
       </div>
 
-      {/* Recherche */}
+      {/* recherche */}
       <div className="relative mb-6 max-w-md">
         <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
         <input
@@ -36,12 +36,12 @@ export default function Categories() {
         />
       </div>
 
-      {/* Cards */}
+      {/* cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {categoriesFiltrees.map(c => (
           <div key={c.id} className="bg-white rounded-xl border border-gray-100 p-5 hover:shadow-sm transition-shadow">
             
-            {/* Icone + Nom */}
+            {/* icone et nom */}
             <div className="flex items-center gap-3 mb-3">
               <div className="bg-[#F8F4EE] p-2.5 rounded-lg">
                 <Tag size={18} className="text-[#2D6A4F]" />
@@ -49,10 +49,10 @@ export default function Categories() {
               <h3 className="font-semibold text-[#2D2D2D]">{c.nom}</h3>
             </div>
 
-            {/* Description */}
+            {/* description */}
             <p className="text-sm text-gray-500 mb-4 leading-relaxed">{c.description}</p>
 
-            {/* Nb prestations */}
+            {/* nb prestations */}
             <div className="flex items-center justify-between">
               <span className="text-xs bg-[#74C69D]/20 text-[#2D6A4F] font-medium px-3 py-1 rounded-full">
                 {c.nbPrestations} prestation{c.nbPrestations > 1 ? 's' : ''}

@@ -17,7 +17,7 @@ export default function Evenements() {
 
   return (
     <div>
-      {/* En-tête */}
+      {/* en tete */}
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-2xl font-bold text-[#2D2D2D]">Événements</h2>
@@ -29,7 +29,7 @@ export default function Evenements() {
         </button>
       </div>
 
-      {/* Filtres + Recherche */}
+      {/* filtres ett Recherche */}
       <div className="flex flex-col sm:flex-row gap-3 mb-6">
         <div className="relative flex-1">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -58,7 +58,7 @@ export default function Evenements() {
         </div>
       </div>
 
-      {/* Cards */}
+      {/* cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {evenementsFiltres.map(e => (
           <div key={e.id} className="bg-white rounded-xl border border-gray-100 p-5 hover:shadow-sm transition-shadow">
@@ -74,10 +74,10 @@ export default function Evenements() {
               </span>
             </div>
 
-            {/* Nom */}
+            {/* nom */}
             <h3 className="font-semibold text-[#2D2D2D] mb-3">{e.nom}</h3>
 
-            {/* Infos */}
+            {/* infos */}
             <div className="flex flex-col gap-2 mb-4">
               <div className="flex items-center gap-2 text-sm text-gray-500">
                 <Calendar size={14} className="text-[#2D6A4F]" />
@@ -93,7 +93,7 @@ export default function Evenements() {
               </div>
             </div>
 
-            {/* Barre de remplissage */}
+            {/* barre de remplissage */}
             <div className="w-full bg-gray-100 rounded-full h-1.5 mb-4">
               <div
                 className="bg-[#2D6A4F] h-1.5 rounded-full transition-all"
@@ -101,7 +101,7 @@ export default function Evenements() {
               />
             </div>
 
-            {/* Actions */}
+            {/* actions */}
             <div className="flex gap-2">
               <button className="text-xs px-3 py-1.5 rounded-lg border border-gray-200 hover:bg-[#F8F4EE] transition-colors">
                 Voir

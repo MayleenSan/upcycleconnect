@@ -21,7 +21,7 @@ export default function Sidebar() {
         <span className="font-bold text-[#2D6A4F] text-lg tracking-tight">UpcycleConnect</span>
       </div>
 
-      {/* Navigation */}
+      {/* navigation */}
       <nav className="flex flex-col gap-1 p-4 flex-1">
         {liens.map((lien) => {
           const Icone = lien.icone
@@ -45,7 +45,7 @@ export default function Sidebar() {
 
       {/* Footer sidebar */}
       <div className="px-6 py-4 border-t border-gray-100 text-xs text-gray-400">
-        Admin v1.0 — UpcycleConnect
+         UpcycleConnect
       </div>
     </aside>
   )

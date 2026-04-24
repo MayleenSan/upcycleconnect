@@ -17,7 +17,7 @@ export default function Prestations() {
 
   return (
     <div>
-      {/* En-tête */}
+      {/* en tête */}
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-2xl font-bold text-[#2D2D2D]">Prestations</h2>
@@ -29,7 +29,7 @@ export default function Prestations() {
         </button>
       </div>
 
-      {/* Filtres + Recherche */}
+      {/* filtres et echerche */}
       <div className="flex flex-col sm:flex-row gap-3 mb-6">
         <div className="relative flex-1">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -58,7 +58,7 @@ export default function Prestations() {
         </div>
       </div>
 
-      {/* Tableau */}
+      {/* tableau */}
       <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
         <table className="w-full text-sm">
           <thead>
