@@ -1,18 +1,35 @@
-import { useState } from 'react'
-import { categories } from '../data/categories'
+import { useState, useEffect } from 'react'
+import { getCategories } from '../services/api'
 import { Search, Plus, Tag } from 'lucide-react'
 
 export default function Categories() {
+  const [categories, setCategories] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
   const [recherche, setRecherche] = useState('')
+
+  useEffect(() => {
+    getCategories()
+      .then(data => {
+        setCategories(data || [])
+        setLoading(false)
+      })
+      .catch(err => {
+        setError(err.message)
+        setLoading(false)
+      })
+  }, [])
 
   const categoriesFiltrees = categories.filter(c =>
     c.nom.toLowerCase().includes(recherche.toLowerCase()) ||
-    c.description.toLowerCase().includes(recherche.toLowerCase())
+    (c.description || '').toLowerCase().includes(recherche.toLowerCase())
   )
+
+  if (loading) return <p className="text-gray-500 text-sm">Chargement...</p>
+  if (error) return <p className="text-red-500 text-sm">Erreur : {error}</p>
 
   return (
     <div>
-      {/* En-tête */}
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-2xl font-bold text-[#2D2D2D]">Catégories</h2>
@@ -24,7 +41,6 @@ export default function Categories() {
         </button>
       </div>
 
-      {/* Recherche */}
       <div className="relative mb-6 max-w-md">
         <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
         <input
@@ -36,12 +52,9 @@ export default function Categories() {
         />
       </div>
 
-      {/* Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {categoriesFiltrees.map(c => (
-          <div key={c.id} className="bg-white rounded-xl border border-gray-100 p-5 hover:shadow-sm transition-shadow">
-            
-            {/* Icone + Nom */}
+          <div key={c.id_categories} className="bg-white rounded-xl border border-gray-100 p-5 hover:shadow-sm transition-shadow">
             <div className="flex items-center gap-3 mb-3">
               <div className="bg-[#F8F4EE] p-2.5 rounded-lg">
                 <Tag size={18} className="text-[#2D6A4F]" />
@@ -49,24 +62,16 @@ export default function Categories() {
               <h3 className="font-semibold text-[#2D2D2D]">{c.nom}</h3>
             </div>
 
-            {/* Description */}
-            <p className="text-sm text-gray-500 mb-4 leading-relaxed">{c.description}</p>
+            <p className="text-sm text-gray-500 mb-4 leading-relaxed">{c.description || '—'}</p>
 
-            {/* Nb prestations */}
-            <div className="flex items-center justify-between">
-              <span className="text-xs bg-[#74C69D]/20 text-[#2D6A4F] font-medium px-3 py-1 rounded-full">
-                {c.nbPrestations} prestation{c.nbPrestations > 1 ? 's' : ''}
-              </span>
-              <div className="flex gap-2">
-                <button className="text-xs px-3 py-1.5 rounded-lg border border-gray-200 hover:bg-[#F8F4EE] transition-colors">
-                  Modifier
-                </button>
-                <button className="text-xs px-3 py-1.5 rounded-lg border border-red-100 text-red-500 hover:bg-red-50 transition-colors">
-                  Supprimer
-                </button>
-              </div>
+            <div className="flex items-center justify-end gap-2">
+              <button className="text-xs px-3 py-1.5 rounded-lg border border-gray-200 hover:bg-[#F8F4EE] transition-colors">
+                Modifier
+              </button>
+              <button className="text-xs px-3 py-1.5 rounded-lg border border-red-100 text-red-500 hover:bg-red-50 transition-colors">
+                Supprimer
+              </button>
             </div>
-
           </div>
         ))}
       </div>

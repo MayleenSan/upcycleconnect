@@ -1,23 +1,41 @@
-import { useState } from 'react'
-import { users } from '../data/users'
-import { Search, UserPlus, CheckCircle, XCircle } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { getUsers } from '../services/api'
+import { Search, UserPlus } from 'lucide-react'
 
 export default function Utilisateurs() {
+  const [users, setUsers] = useState([])
+  const [chargement, setChargement] = useState(true)
+  const [erreur, setErreur] = useState(null)
   const [recherche, setRecherche] = useState('')
   const [filtre, setFiltre] = useState('Tous')
 
-  const filtres = ['Tous', 'Particulier', 'Prestataire', 'Admin']
+  useEffect(() => {
+    getUsers()
+      .then(data => {
+        setUsers(data)
+        setChargement(false)
+      })
+      .catch(err => {
+        setErreur(err.message)
+        setChargement(false)
+      })
+  }, [])
+
+  const filtres = ['Tous', 'particulier', 'professionnel', 'salarie', 'admin']
 
   const utilisateursFiltres = users.filter(u => {
-    const matchRecherche = u.nom.toLowerCase().includes(recherche.toLowerCase()) ||
-      u.email.toLowerCase().includes(recherche.toLowerCase())
-    const matchFiltre = filtre === 'Tous' || u.type === filtre
+    const nom = `${u.first_name} ${u.last_name}`.toLowerCase()
+    const matchRecherche = nom.includes(recherche.toLowerCase()) ||
+      u.mail.toLowerCase().includes(recherche.toLowerCase())
+    const matchFiltre = filtre === 'Tous' || u.role === filtre
     return matchRecherche && matchFiltre
   })
 
+  if (chargement) return <div className="text-center py-12 text-gray-400">Chargement...</div>
+  if (erreur) return <div className="text-center py-12 text-red-500">{erreur}</div>
+
   return (
     <div>
-      {/* En-tête */}
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-2xl font-bold text-[#2D2D2D]">Utilisateurs</h2>
@@ -72,22 +90,20 @@ export default function Utilisateurs() {
           </thead>
           <tbody>
             {utilisateursFiltres.map((u, index) => (
-              <tr key={u.id} className={`border-b border-gray-50 hover:bg-[#F8F4EE] transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50/30'}`}>
-                <td className="px-6 py-4 font-medium text-[#2D2D2D]">{u.nom}</td>
-                <td className="px-6 py-4 text-gray-500">{u.email}</td>
+              <tr key={u.id_users} className={`border-b border-gray-50 hover:bg-[#F8F4EE] transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50/30'}`}>
+                <td className="px-6 py-4 font-medium text-[#2D2D2D]">{u.first_name} {u.last_name}</td>
+                <td className="px-6 py-4 text-gray-500">{u.mail}</td>
                 <td className="px-6 py-4">
                   <span className={`px-3 py-1 rounded-full text-xs font-medium
-                    ${u.type === 'Admin' ? 'bg-[#2D6A4F] text-white' :
-                      u.type === 'Prestataire' ? 'bg-[#74C69D]/30 text-[#2D6A4F]' :
+                    ${u.role === 'admin' ? 'bg-[#2D6A4F] text-white' :
+                      u.role === 'professionnel' ? 'bg-[#74C69D]/30 text-[#2D6A4F]' :
                       'bg-gray-100 text-gray-600'}`}>
-                    {u.type}
+                    {u.role}
                   </span>
                 </td>
                 <td className="px-6 py-4">
-                  <span className={`flex items-center gap-1.5 w-fit px-3 py-1 rounded-full text-xs font-medium
-                    ${u.statut === 'Actif' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-500'}`}>
-                    {u.statut === 'Actif' ? <CheckCircle size={12} /> : <XCircle size={12} />}
-                    {u.statut}
+                  <span className="px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                    {u.language || 'fr'}
                   </span>
                 </td>
                 <td className="px-6 py-4">

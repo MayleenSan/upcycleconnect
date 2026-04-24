@@ -1,10 +1,24 @@
-import { useState } from 'react'
-import { prestations } from '../data/prestations'
+import { useEffect, useState } from 'react'
+import { getPrestations } from '../services/api'
 import { Search, Plus, CheckCircle, XCircle } from 'lucide-react'
 
 export default function Prestations() {
+  const [prestations,setPrestations] = useState([])
+  const [chargement, setChargement] = useState(true)
+  const [erreur, setErreur] = useState(null)
   const [recherche, setRecherche] = useState('')
   const [filtre, setFiltre] = useState('Tous')
+  useEffect(() => {
+    getPrestations()
+      .then(data => {
+        setPrestations(data)
+        setChargement(false)
+      })
+      .catch(err => {
+        setErreur(err.message)
+        setChargement(false)
+      })
+  }, [])
 
   const filtres = ['Tous', 'Disponible', 'Indisponible']
 
@@ -14,6 +28,8 @@ export default function Prestations() {
     const matchFiltre = filtre === 'Tous' || p.statut === filtre
     return matchRecherche && matchFiltre
   })
+  if (chargement) return <p className="text-gray-500 text-sm">Chargement...</p>
+if (erreur) return <p className="text-red-500 text-sm">Erreur : {erreur}</p>
 
   return (
     <div>

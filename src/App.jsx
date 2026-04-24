@@ -1,11 +1,12 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Sidebar from './components/Sidebar'
-import Header from './components/Header'
-import Dashboard from './pages/Dashboard'
-import Utilisateurs from './pages/Utilisateurs'
-import Prestations from './pages/Prestations'
-import Categories from './pages/Categories'
-import Evenements from './pages/Evenements'
+import Sidebar from './components/sidebar'
+import Header from './components/header'
+import Dashboard from './pages/dashboard'
+import Utilisateurs from './pages/utilisateurs'
+import Prestations from './pages/prestations'
+import Categories from './pages/categories'
+import Evenements from './pages/evenements'
+
 
 const titres = {
   '/': 'Dashboard',
