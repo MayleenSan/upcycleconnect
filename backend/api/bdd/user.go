@@ -29,7 +29,7 @@ func GetUserByMail(email string)(models.User, error){
 
 }
 func GetAllUsers()([]models.User, error){
-	var users []models.User
+	users := make([]models.User, 0)
 	query:=`SELECT id_users,first_name, last_name, mail, password, phone, address, created_at, role, language FROM "users"`
 	rows, err := config.DB.Query(query)
 	if err != nil{
@@ -75,7 +75,7 @@ func CreateUser(user models.User) error{
 	user.Language,
 	)
 	if err != nil{
-		log.Println("Error inserting user into database")
+		log.Println("Error inserting user into database:", err)
 		return err
 	}
 	return nil

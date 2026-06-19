@@ -7,7 +7,7 @@ import (
 )
 
 func GetAllCategories() ([]models.Categorie, error) {
-	var categories []models.Categorie
+	categories := make([]models.Categorie, 0)
 	query := `SELECT id_categories, nom, description FROM categories`
 	rows, err := config.DB.Query(query)
 	if err != nil {

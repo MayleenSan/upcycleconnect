@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Sidebar from './components/sidebar'
 import Header from './components/header'
 import Dashboard from './pages/dashboard'
@@ -6,6 +6,7 @@ import Utilisateurs from './pages/utilisateurs'
 import Prestations from './pages/prestations'
 import Categories from './pages/categories'
 import Evenements from './pages/evenements'
+import Login from './pages/login'
 
 
 const titres = {
@@ -33,15 +34,25 @@ function Layout({ children }) {
   )
 }
 
+function RouteProtegee({ children }) {
+  const token = localStorage.getItem('token')
+  if (!token) {
+    return <Navigate to="/login" />
+  }
+  return children
+}
+
+
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Layout><Dashboard /></Layout>} />
-        <Route path="/utilisateurs" element={<Layout><Utilisateurs /></Layout>} />
-        <Route path="/prestations" element={<Layout><Prestations /></Layout>} />
-        <Route path="/categories" element={<Layout><Categories /></Layout>} />
-        <Route path="/evenements" element={<Layout><Evenements /></Layout>} />
+        <Route path="/" element={<RouteProtegee><Layout><Dashboard /></Layout></RouteProtegee>} />
+        <Route path="/utilisateurs" element={<RouteProtegee><Layout><Utilisateurs /></Layout></RouteProtegee>} />
+        <Route path="/prestations" element={<RouteProtegee><Layout><Prestations /></Layout></RouteProtegee>} />
+        <Route path="/categories" element={<RouteProtegee><Layout><Categories /></Layout></RouteProtegee>} />
+        <Route path="/evenements" element={<RouteProtegee><Layout><Evenements /></Layout></RouteProtegee>} />
+        <Route path="/login" element={<Login />} />
       </Routes>
     </BrowserRouter>
   )

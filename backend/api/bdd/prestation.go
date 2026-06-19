@@ -27,7 +27,7 @@ func GetPrestationById(id int)(models.Prestation,error){
 	return p, nil
 }
 func GetAllPrestations() ([]models.Prestation,error) {
-	var prestations []models.Prestation
+	prestations := make([]models.Prestation, 0)
 	query := `SELECT id_prestation, nom, description, tarif, capacite_max, duree,date_creation, statut,id_categories,id_users FROM prestation`
 	rows, err := config.DB.Query(query)
 	if err != nil {
@@ -69,8 +69,8 @@ func CreatePrestation(prestation models.Prestation)error{
 	prestation.CapaciteMax,
 	prestation.Duree,
 	prestation.Statut,
-	prestation.IDUser,
 	prestation.IDCategorie,
+	prestation.IDUser,
 	)
 	if err != nil{
 		log.Println("Error inserting user into database")

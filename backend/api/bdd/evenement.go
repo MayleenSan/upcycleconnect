@@ -7,7 +7,7 @@ import (
 )
 
 func GetAllEvenements() ([]models.Evenement, error) {
-	var evenements []models.Evenement
+	evenements := make([]models.Evenement, 0)
 	query := `SELECT id_evenement, nom, description, date_debut, date_fin, lieu, capacite_max, statut, id_users FROM evenement`
 	rows, err := config.DB.Query(query)
 	if err != nil {

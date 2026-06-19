@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import { getUsers } from '../services/api'
-import { Search, UserPlus } from 'lucide-react'
+import { getUsers, createUser, deleteUser } from '../services/api'
+import { Search, UserPlus, X } from 'lucide-react'
 
 export default function Utilisateurs() {
   const [users, setUsers] = useState([])
@@ -8,18 +8,43 @@ export default function Utilisateurs() {
   const [erreur, setErreur] = useState(null)
   const [recherche, setRecherche] = useState('')
   const [filtre, setFiltre] = useState('Tous')
+  const [showModal, setShowModal] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [form, setForm] = useState({
+    first_name: '', last_name: '', mail: '', password: '',
+    phone: '', address: '', role: 'particulier', language: 'fr'
+  })
 
-  useEffect(() => {
+  const charger = () => {
     getUsers()
-      .then(data => {
-        setUsers(data)
-        setChargement(false)
-      })
-      .catch(err => {
-        setErreur(err.message)
-        setChargement(false)
-      })
-  }, [])
+      .then(data => { setUsers(data || []); setChargement(false) })
+      .catch(err => { setErreur(err.message); setChargement(false) })
+  }
+
+  useEffect(() => { charger() }, [])
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setSubmitting(true)
+    try {
+      await createUser(form)
+      setShowModal(false)
+      setForm({ first_name: '', last_name: '', mail: '', password: '', phone: '', address: '', role: 'particulier', language: 'fr' })
+      charger()
+    } catch (err) {
+      alert('Erreur : ' + err.message)
+    } finally {
+      setSubmitting(false)
+    }
+  }
+  const handleDelete = async (id) => {
+    const reponse = window.confirm("Tu veux vraiment supprimer cet utilisateur ?")
+    if (reponse){
+      await deleteUser(id)
+      charger()
+    }
+
+  }
 
   const filtres = ['Tous', 'particulier', 'professionnel', 'salarie', 'admin']
 
@@ -41,7 +66,10 @@ export default function Utilisateurs() {
           <h2 className="text-2xl font-bold text-[#2D2D2D]">Utilisateurs</h2>
           <p className="text-gray-500 text-sm mt-1">{users.length} utilisateurs enregistrés</p>
         </div>
-        <button className="flex items-center gap-2 bg-[#2D6A4F] text-white px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-[#245a42] transition-colors">
+        <button
+          onClick={() => setShowModal(true)}
+          className="flex items-center gap-2 bg-[#2D6A4F] text-white px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-[#245a42] transition-colors"
+        >
           <UserPlus size={16} />
           Ajouter
         </button>
@@ -111,7 +139,9 @@ export default function Utilisateurs() {
                     <button className="text-xs px-3 py-1.5 rounded-lg border border-gray-200 hover:bg-[#F8F4EE] transition-colors">
                       Voir
                     </button>
-                    <button className="text-xs px-3 py-1.5 rounded-lg border border-red-100 text-red-500 hover:bg-red-50 transition-colors">
+                    <button 
+                    onClick={() => handleDelete(u.id_users)}
+                    className="text-xs px-3 py-1.5 rounded-lg border border-red-100 text-red-500 hover:bg-red-50 transition-colors">
                       Supprimer
                     </button>
                   </div>
@@ -127,6 +157,83 @@ export default function Utilisateurs() {
           </div>
         )}
       </div>
+
+      {showModal && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-6 w-full max-w-lg shadow-xl max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-5">
+              <h3 className="text-lg font-semibold text-[#2D2D2D]">Nouvel utilisateur</h3>
+              <button onClick={() => setShowModal(false)} className="text-gray-400 hover:text-gray-600">
+                <X size={20} />
+              </button>
+            </div>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Prénom *</label>
+                  <input required type="text" value={form.first_name}
+                    onChange={e => setForm({ ...form, first_name: e.target.value })}
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#74C69D]" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Nom *</label>
+                  <input required type="text" value={form.last_name}
+                    onChange={e => setForm({ ...form, last_name: e.target.value })}
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#74C69D]" />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+                <input required type="email" value={form.mail}
+                  onChange={e => setForm({ ...form, mail: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#74C69D]" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Mot de passe *</label>
+                <input required type="password" value={form.password}
+                  onChange={e => setForm({ ...form, password: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#74C69D]" />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Téléphone</label>
+                  <input type="tel" value={form.phone}
+                    onChange={e => setForm({ ...form, phone: e.target.value })}
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#74C69D]" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Langue</label>
+                  <select value={form.language} onChange={e => setForm({ ...form, language: e.target.value })}
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#74C69D]">
+                    <option value="fr">Français</option>
+                    <option value="en">English</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Rôle</label>
+                <select value={form.role} onChange={e => setForm({ ...form, role: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#74C69D]">
+                  <option value="particulier">Particulier</option>
+                  <option value="professionnel">Professionnel</option>
+                  <option value="salarie">Salarié</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </div>
+              <div className="flex gap-2 justify-end mt-2">
+                <button type="button" onClick={() => setShowModal(false)}
+                  className="px-4 py-2 text-sm rounded-lg border border-gray-200 hover:bg-gray-50">
+                  Annuler
+                </button>
+                <button type="submit" disabled={submitting}
+                  className="px-4 py-2 text-sm rounded-lg bg-[#2D6A4F] text-white hover:bg-[#245a42] disabled:opacity-50">
+                  {submitting ? 'Création...' : 'Créer'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

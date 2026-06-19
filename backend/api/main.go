@@ -1,5 +1,6 @@
 package main
 
+
 import (
 	"fmt"
 	"log"
@@ -7,12 +8,13 @@ import (
 	"strings"
 	"upcycleconnect/api/config"
 	"upcycleconnect/api/handlers"
+	"upcycleconnect/api/middleware"
 )
 
 func main() {
 	config.ConnectDB()
 
-	http.HandleFunc("/api/users/", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/api/users/", middleware.AuthMiddleware(middleware.RoleMiddleware("admin", func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodGet:
 			if strings.Contains(r.URL.Path, "/email/"){
@@ -29,8 +31,8 @@ func main() {
 		default:
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		}
-	})
-	http.HandleFunc("/api/prestation/", func(w http.ResponseWriter, r *http.Request) {
+	})))
+	http.HandleFunc("/api/prestation/", middleware.AuthMiddleware(middleware.RoleMiddleware("admin", func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodGet:
 			if strings.TrimPrefix(r.URL.Path, "/api/prestation/") != "" {
@@ -47,8 +49,8 @@ func main() {
 		default:
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		}
-	})
-	http.HandleFunc("/api/categories/", func(w http.ResponseWriter, r *http.Request) {
+	})))
+	http.HandleFunc("/api/categories/", middleware.AuthMiddleware(middleware.RoleMiddleware("admin", func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodGet:
 			if strings.TrimPrefix(r.URL.Path, "/api/categories/") != "" {
@@ -65,9 +67,9 @@ func main() {
 		default:
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		}
-	})
+	})))
 
-	http.HandleFunc("/api/evenements/", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/api/evenements/", middleware.AuthMiddleware(middleware.RoleMiddleware("admin", func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodGet:
 			if strings.TrimPrefix(r.URL.Path, "/api/evenements/") != "" {
@@ -84,7 +86,9 @@ func main() {
 		default:
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		}
-	})
+	})))
+	http.HandleFunc("/api/auth/register", handlers.Register)
+	http.HandleFunc("/api/auth/login", handlers.Login)
 
 	fmt.Println("Server is running on port 8085")
 	
