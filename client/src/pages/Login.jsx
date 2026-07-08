@@ -21,14 +21,12 @@ export default function Login({ setConnecte }) {
     <div className="min-h-screen bg-[#F8F4EE] flex items-center justify-center">
       <div className="w-full max-w-md">
 
-        {/* logo */}
         <div className="flex flex-col items-center mb-8">
           <img src="/logo.png" alt="UpcycleConnect" className="w-16 h-16 object-contain mb-4" />
           <h1 className="text-2xl font-bold text-[#2D6A4F]">UpcycleConnect</h1>
           <p className="text-gray-500 text-sm mt-1">Bienvenue sur la plateforme</p>
         </div>
 
-        {/* card */}
         <div className="bg-white rounded-2xl border border-gray-100 p-8 shadow-sm">
           <h2 className="text-lg font-semibold text-[#2D2D2D] mb-6">Connexion</h2>
 

@@ -6,7 +6,11 @@ import Utilisateurs from './pages/utilisateurs'
 import Prestations from './pages/prestations'
 import Categories from './pages/categories'
 import Evenements from './pages/evenements'
+import Annonces from './pages/annonces'
 import Login from './pages/login'
+import Register from './pages/register'
+import Accueil from './pages/accueil'
+import Espace from './pages/espace'
 
 
 const titres = {
@@ -15,6 +19,7 @@ const titres = {
   '/prestations': 'Prestations',
   '/categories': 'Catégories',
   '/evenements': 'Événements',
+  '/annonces': 'Annonces',
 }
 
 function Layout({ children }) {
@@ -34,10 +39,31 @@ function Layout({ children }) {
   )
 }
 
+function getRole() {
+  const token = sessionStorage.getItem('token')
+  if (!token) return null
+  try {
+    return JSON.parse(atob(token.split('.')[1])).role
+  } catch {
+    return null
+  }
+}
+
 function RouteProtegee({ children }) {
-  const token = localStorage.getItem('token')
+  const token = sessionStorage.getItem('token')
   if (!token) {
     return <Navigate to="/login" />
+  }
+  return children
+}
+
+function RouteAdmin({ children }) {
+  const token = sessionStorage.getItem('token')
+  if (!token) {
+    return <Navigate to="/login" />
+  }
+  if (getRole() !== 'admin') {
+    return <Navigate to="/espace" />
   }
   return children
 }
@@ -47,12 +73,16 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<RouteProtegee><Layout><Dashboard /></Layout></RouteProtegee>} />
-        <Route path="/utilisateurs" element={<RouteProtegee><Layout><Utilisateurs /></Layout></RouteProtegee>} />
-        <Route path="/prestations" element={<RouteProtegee><Layout><Prestations /></Layout></RouteProtegee>} />
-        <Route path="/categories" element={<RouteProtegee><Layout><Categories /></Layout></RouteProtegee>} />
-        <Route path="/evenements" element={<RouteProtegee><Layout><Evenements /></Layout></RouteProtegee>} />
+        <Route path="/" element={<RouteAdmin><Layout><Dashboard /></Layout></RouteAdmin>} />
+        <Route path="/utilisateurs" element={<RouteAdmin><Layout><Utilisateurs /></Layout></RouteAdmin>} />
+        <Route path="/prestations" element={<RouteAdmin><Layout><Prestations /></Layout></RouteAdmin>} />
+        <Route path="/categories" element={<RouteAdmin><Layout><Categories /></Layout></RouteAdmin>} />
+        <Route path="/evenements" element={<RouteAdmin><Layout><Evenements /></Layout></RouteAdmin>} />
+        <Route path="/annonces" element={<RouteAdmin><Layout><Annonces /></Layout></RouteAdmin>} />
+        <Route path="/espace" element={<RouteProtegee><Espace /></RouteProtegee>} />
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/accueil" element={<Accueil />} />
       </Routes>
     </BrowserRouter>
   )

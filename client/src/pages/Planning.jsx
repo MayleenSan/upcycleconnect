@@ -30,7 +30,6 @@ export default function Planning() {
   return (
     <div>
 
-      {/* header */}
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-[#2D2D2D]">Mon Planning</h2>
         <p className="text-gray-500 text-sm mt-0.5">Tes réservations et événements à venir</p>
@@ -82,7 +81,6 @@ export default function Planning() {
         </div>
       )}
 
-      {/* modal confirmation annulation */}
       {aAnnuler && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center px-4">
           <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl">

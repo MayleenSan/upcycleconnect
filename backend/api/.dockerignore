@@ -1,0 +1,5 @@
+# Ne PAS embarquer ces fichiers dans l'image de l'API.
+.env
+api
+*.sh
+*.log

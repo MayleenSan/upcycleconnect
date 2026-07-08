@@ -1,6 +1,7 @@
 package bdd
 
 import (
+	"errors"
 	"log"
 	"upcycleconnect/api/config"
 	"upcycleconnect/api/models"
@@ -8,7 +9,7 @@ import (
 
 func GetUserByMail(email string)(models.User, error){
 	var user models.User
-	query:=`SELECT id_users, first_name, last_name, mail, password, phone, address, created_at, role, language FROM "users" WHERE mail=$1`
+	query:=`SELECT id_users, first_name, last_name, mail, password, COALESCE(phone,''), COALESCE(address,''), created_at, role, language, verified FROM "users" WHERE mail=$1`
 	err := config.DB.QueryRow(query, email).Scan(
 		&user.ID,
 		&user.FirstName,
@@ -20,6 +21,7 @@ func GetUserByMail(email string)(models.User, error){
 		&user.CreatedAt,
 		&user.Role,
 		&user.Language,
+		&user.Verified,
 	)
 	if err != nil {
 		return user,err
@@ -30,7 +32,7 @@ func GetUserByMail(email string)(models.User, error){
 }
 func GetAllUsers()([]models.User, error){
 	users := make([]models.User, 0)
-	query:=`SELECT id_users,first_name, last_name, mail, password, phone, address, created_at, role, language FROM "users"`
+	query:=`SELECT id_users,first_name, last_name, mail, password, COALESCE(phone,''), COALESCE(address,''), created_at, role, language FROM "users"`
 	rows, err := config.DB.Query(query)
 	if err != nil{
 		return nil,err
@@ -106,6 +108,28 @@ func UpdateUser(id int, user models.User)error{
 	if err != nil {
 		log.Println("Error updating user in database",err)
 		return err
+	}
+	return nil
+}
+
+func SetVerificationToken(mail, token string) error {
+	query := `UPDATE "users" SET verified=false, verification_token=$1 WHERE mail=$2`
+	_, err := config.DB.Exec(query, token, mail)
+	if err != nil {
+		log.Println("Error setting verification token:", err)
+	}
+	return err
+}
+
+func VerifyUserByToken(token string) error {
+	query := `UPDATE "users" SET verified=true, verification_token=NULL WHERE verification_token=$1`
+	res, err := config.DB.Exec(query, token)
+	if err != nil {
+		return err
+	}
+	n, _ := res.RowsAffected()
+	if n == 0 {
+		return errors.New("token invalide")
 	}
 	return nil
 }

@@ -27,7 +27,12 @@ func AuthMiddleware(next http.HandlerFunc) http.HandlerFunc{
        }
        claims := token.Claims.(jwt.MapClaims)
         role := claims["role"]
+        var userID int
+        if idf, ok := claims["id"].(float64); ok {
+            userID = int(idf)
+        }
         ctx := context.WithValue(r.Context(), "role", role)
+        ctx = context.WithValue(ctx, "id", userID)
         next(w, r.WithContext(ctx))
     }
 }

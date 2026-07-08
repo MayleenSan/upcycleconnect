@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { getCategories, createCategorie } from '../services/api'
+import { getCategories, createCategorie, deleteCategorie } from '../services/api'
 import { Search, Plus, Tag, X } from 'lucide-react'
 
 export default function Categories() {
@@ -31,6 +31,13 @@ export default function Categories() {
       alert('Erreur : ' + err.message)
     } finally {
       setSubmitting(false)
+    }
+  }
+
+  const handleDelete = async (id) => {
+    if (window.confirm('Supprimer cette catégorie ?')) {
+      try { await deleteCategorie(id); charger() }
+      catch (err) { alert('Erreur : ' + err.message) }
     }
   }
 
@@ -80,8 +87,7 @@ export default function Categories() {
             </div>
             <p className="text-sm text-gray-500 mb-4 leading-relaxed">{c.description || '—'}</p>
             <div className="flex items-center justify-end gap-2">
-              <button className="text-xs px-3 py-1.5 rounded-lg border border-gray-200 hover:bg-[#F8F4EE] transition-colors">Modifier</button>
-              <button className="text-xs px-3 py-1.5 rounded-lg border border-red-100 text-red-500 hover:bg-red-50 transition-colors">Supprimer</button>
+              <button onClick={() => handleDelete(c.id_categories)} className="text-xs px-3 py-1.5 rounded-lg border border-red-100 text-red-500 hover:bg-red-50 transition-colors">Supprimer</button>
             </div>
           </div>
         ))}

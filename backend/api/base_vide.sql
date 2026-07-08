@@ -1,25 +1,27 @@
-CREATE TABLE IF NOT EXISTS users (
-    id_users    SERIAL PRIMARY KEY,
-    first_name  VARCHAR(100) NOT NULL,
-    last_name   VARCHAR(100) NOT NULL,
-    mail        VARCHAR(255) NOT NULL UNIQUE,
-    password    VARCHAR(255) NOT NULL,
-    phone       VARCHAR(20),
-    address     TEXT,
-    created_at  TIMESTAMP DEFAULT NOW(),
-    role        VARCHAR(50) NOT NULL DEFAULT 'particulier',
-    language    VARCHAR(10) NOT NULL DEFAULT 'fr',
+DROP TABLE IF EXISTS annonce, prestation, evenement, categories, users CASCADE;
+
+CREATE TABLE users (
+    id_users            SERIAL PRIMARY KEY,
+    first_name          VARCHAR(100) NOT NULL,
+    last_name           VARCHAR(100) NOT NULL,
+    mail                VARCHAR(255) NOT NULL UNIQUE,
+    password            VARCHAR(255) NOT NULL,
+    phone               VARCHAR(20),
+    address             TEXT,
+    created_at          TIMESTAMP DEFAULT NOW(),
+    role                VARCHAR(50) NOT NULL DEFAULT 'particulier',
+    language            VARCHAR(10) NOT NULL DEFAULT 'fr',
     verified            BOOLEAN NOT NULL DEFAULT true,
     verification_token  VARCHAR(255)
 );
 
-CREATE TABLE IF NOT EXISTS categories (
+CREATE TABLE categories (
     id_categories SERIAL PRIMARY KEY,
     nom           VARCHAR(100) NOT NULL,
     description   TEXT
 );
 
-CREATE TABLE IF NOT EXISTS evenement (
+CREATE TABLE evenement (
     id_evenement  SERIAL PRIMARY KEY,
     nom           VARCHAR(255) NOT NULL,
     description   TEXT,
@@ -31,7 +33,7 @@ CREATE TABLE IF NOT EXISTS evenement (
     id_users      INT REFERENCES users(id_users) ON DELETE SET NULL
 );
 
-CREATE TABLE IF NOT EXISTS prestation (
+CREATE TABLE prestation (
     id_prestation  SERIAL PRIMARY KEY,
     nom            VARCHAR(255) NOT NULL,
     description    TEXT,
@@ -44,7 +46,7 @@ CREATE TABLE IF NOT EXISTS prestation (
     id_users       INT REFERENCES users(id_users) ON DELETE SET NULL
 );
 
-CREATE TABLE IF NOT EXISTS annonce (
+CREATE TABLE annonce (
     id_annonce     SERIAL PRIMARY KEY,
     titre          VARCHAR(255) NOT NULL,
     description    TEXT,

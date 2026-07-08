@@ -1,0 +1,60 @@
+services:
+
+  # --- Base de données PostgreSQL ---
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      # Scripts exécutés UNE fois, à la création initiale de la base :
+      - ./backend/api/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./backend/api/seed_demo.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+  # --- API Go ---
+  api:
+    build: ./backend/api
+    environment:
+      # DB_URL pointe vers le service "postgres" (réseau interne compose), port 5432.
+      DB_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?sslmode=disable
+      JWT_SECRET: ${JWT_SECRET}
+      SMTP_EMAIL: ${SMTP_EMAIL}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      BACKEND_URL: ${BACKEND_URL}
+      FRONTEND_URL: ${FRONTEND_URL}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    # Pas de "ports:" exposés : l'API n'est joignable QUE par le front (réseau interne).
+
+  # --- Front React servi par Nginx (statique + proxy /api → api:8085) ---
+  front:
+    build:
+      context: .
+      dockerfile: Dockerfile.front
+    ports:
+      # Port hôte configurable via FRONT_PORT (défaut 8080). Le Nginx HÔTE
+      # (HTTPS) fera : upcycle-connect.fr -> localhost:${FRONT_PORT}
+      - "${FRONT_PORT:-8080}:80"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+networks:
+  default:
+    driver: bridge
+    driver_opts:
+      com.docker.network.driver.mtu: 1400

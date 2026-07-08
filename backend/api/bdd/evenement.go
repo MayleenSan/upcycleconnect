@@ -8,7 +8,7 @@ import (
 
 func GetAllEvenements() ([]models.Evenement, error) {
 	evenements := make([]models.Evenement, 0)
-	query := `SELECT id_evenement, nom, description, date_debut, date_fin, lieu, capacite_max, statut, id_users FROM evenement`
+	query := `SELECT id_evenement, nom, description, date_debut, date_fin, lieu, capacite_max, statut, COALESCE(id_users,0) FROM evenement`
 	rows, err := config.DB.Query(query)
 	if err != nil {
 		return nil, err
@@ -41,7 +41,7 @@ func GetAllEvenements() ([]models.Evenement, error) {
 
 func GetEvenementById(id int) (models.Evenement, error) {
 	var e models.Evenement
-	query := `SELECT id_evenement, nom, description, date_debut, date_fin, lieu, capacite_max, statut, id_users FROM evenement WHERE id_evenement=$1`
+	query := `SELECT id_evenement, nom, description, date_debut, date_fin, lieu, capacite_max, statut, COALESCE(id_users,0) FROM evenement WHERE id_evenement=$1`
 	err := config.DB.QueryRow(query, id).Scan(
 		&e.ID,
 		&e.Nom,
@@ -69,7 +69,7 @@ func CreateEvenement(e models.Evenement) error {
 		e.Lieu,
 		e.CapaciteMax,
 		e.Statut,
-		e.IDUser,
+		nullIfZero(e.IDUser),
 	)
 	if err != nil {
 		log.Println("Error inserting evenement:", err)
@@ -98,7 +98,7 @@ func UpdateEvenement(id int, e models.Evenement) error {
 		e.Lieu,
 		e.CapaciteMax,
 		e.Statut,
-		e.IDUser,
+		nullIfZero(e.IDUser),
 		id,
 	)
 	if err != nil {

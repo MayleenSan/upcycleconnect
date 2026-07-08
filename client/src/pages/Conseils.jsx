@@ -45,13 +45,11 @@ export default function Conseils() {
   return (
     <div>
 
-      {/* header */}
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-[#2D2D2D]">Conseils & Astuces</h2>
         <p className="text-gray-500 text-sm mt-0.5">Idées et tutoriels pour upcycler chez toi</p>
       </div>
 
-      {/* banniere */}
       <div className="bg-[#2D6A4F] rounded-xl p-5 flex items-center gap-4 mb-6">
         <Leaf size={22} className="text-white shrink-0" />
         <p className="text-white text-sm">
@@ -59,7 +57,6 @@ export default function Conseils() {
         </p>
       </div>
 
-      {/* filtres */}
       <div className="flex gap-2 mb-6 flex-wrap">
         {categories.map(c => (
           <button
@@ -76,7 +73,6 @@ export default function Conseils() {
         ))}
       </div>
 
-      {/* accordeon */}
       <div className="flex flex-col gap-3">
         {filtres.map(conseil => (
           <div key={conseil.id} className="bg-white rounded-xl border border-gray-100 overflow-hidden">

@@ -8,7 +8,7 @@ import (
 
 func GetPrestationById(id int)(models.Prestation,error){
 	var p models.Prestation
-	query :=`SELECT id_prestation, nom, description, tarif, capacite_max, duree,date_creation, statut,id_categories,id_users FROM prestation WHERE id_prestation=$1`
+	query :=`SELECT id_prestation, nom, description, tarif, capacite_max, duree,date_creation, statut,COALESCE(id_categories,0),COALESCE(id_users,0) FROM prestation WHERE id_prestation=$1`
 	err := config.DB.QueryRow(query,id).Scan(
 		&p.ID,
 		&p.Nom,
@@ -28,7 +28,7 @@ func GetPrestationById(id int)(models.Prestation,error){
 }
 func GetAllPrestations() ([]models.Prestation,error) {
 	prestations := make([]models.Prestation, 0)
-	query := `SELECT id_prestation, nom, description, tarif, capacite_max, duree,date_creation, statut,id_categories,id_users FROM prestation`
+	query := `SELECT id_prestation, nom, description, tarif, capacite_max, duree,date_creation, statut,COALESCE(id_categories,0),COALESCE(id_users,0) FROM prestation`
 	rows, err := config.DB.Query(query)
 	if err != nil {
 		return nil, err
@@ -69,11 +69,11 @@ func CreatePrestation(prestation models.Prestation)error{
 	prestation.CapaciteMax,
 	prestation.Duree,
 	prestation.Statut,
-	prestation.IDCategorie,
-	prestation.IDUser,
+	nullIfZero(prestation.IDCategorie),
+	nullIfZero(prestation.IDUser),
 	)
 	if err != nil{
-		log.Println("Error inserting user into database")
+		log.Println("Error inserting prestation into database:", err)
 		return err
 	}
 	return nil
@@ -97,8 +97,8 @@ func UpdatePrestation(id int, prestation models.Prestation) error {
 		prestation.CapaciteMax,
 		prestation.Duree,
 		prestation.Statut,
-		prestation.IDCategorie,
-		prestation.IDUser,
+		nullIfZero(prestation.IDCategorie),
+		nullIfZero(prestation.IDUser),
 		id,
 	)
 	if err != nil {

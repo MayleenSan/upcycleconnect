@@ -87,8 +87,39 @@ func main() {
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		}
 	})))
+
+	http.HandleFunc("/api/annonces/", middleware.AuthMiddleware(middleware.RoleMiddleware("admin", func(w http.ResponseWriter, r *http.Request) {
+		switch r.Method {
+		case http.MethodGet:
+			if strings.TrimPrefix(r.URL.Path, "/api/annonces/") != "" {
+				handlers.GetAnnonceById(w, r)
+			} else {
+				handlers.GetAllAnnonces(w, r)
+			}
+		case http.MethodPost:
+			handlers.CreateAnnonce(w, r)
+		case http.MethodDelete:
+			handlers.DeleteAnnonce(w, r)
+		case http.MethodPut:
+			handlers.UpdateAnnonce(w, r)
+		default:
+			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		}
+	})))
+	http.HandleFunc("/api/mes-annonces/", middleware.AuthMiddleware(func(w http.ResponseWriter, r *http.Request) {
+		switch r.Method {
+		case http.MethodGet:
+			handlers.GetMesAnnonces(w, r)
+		case http.MethodPost:
+			handlers.CreateMonAnnonce(w, r)
+		default:
+			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		}
+	}))
+
 	http.HandleFunc("/api/auth/register", handlers.Register)
 	http.HandleFunc("/api/auth/login", handlers.Login)
+	http.HandleFunc("/api/auth/verify", handlers.VerifyEmail)
 
 	fmt.Println("Server is running on port 8085")
 	

@@ -29,14 +29,12 @@ export default function Register({ setConnecte }) {
     <div className="min-h-screen bg-[#F8F4EE] flex items-center justify-center py-10">
       <div className="w-full max-w-md">
 
-        {/* logo */}
         <div className="flex flex-col items-center mb-8">
           <img src="/logo.png" alt="UpcycleConnect" className="w-16 h-16 object-contain mb-4" />
           <h1 className="text-2xl font-bold text-[#2D6A4F]">UpcycleConnect</h1>
           <p className="text-gray-500 text-sm mt-1">Créer un compte</p>
         </div>
 
-        {/* card */}
         <div className="bg-white rounded-2xl border border-gray-100 p-8 shadow-sm">
           <h2 className="text-lg font-semibold text-[#2D2D2D] mb-6">Inscription</h2>
 
@@ -46,7 +44,6 @@ export default function Register({ setConnecte }) {
             </div>
           )}
 
-          {/* nom + prenom */}
           <div className="flex gap-3 mb-4">
             <div className="flex-1">
               <label className="text-sm font-medium text-[#2D2D2D] mb-1.5 block">Nom</label>
@@ -75,7 +72,6 @@ export default function Register({ setConnecte }) {
             </div>
           </div>
 
-          {/* email */}
           <div className="mb-4">
             <label className="text-sm font-medium text-[#2D2D2D] mb-1.5 block">Email</label>
             <div className="relative">
@@ -91,7 +87,6 @@ export default function Register({ setConnecte }) {
             </div>
           </div>
 
-          {/* mdp */}
           <div className="mb-4">
             <label className="text-sm font-medium text-[#2D2D2D] mb-1.5 block">Mot de passe</label>
             <div className="relative">
@@ -107,7 +102,6 @@ export default function Register({ setConnecte }) {
             </div>
           </div>
 
-          {/* confirm */}
           <div className="mb-6">
             <label className="text-sm font-medium text-[#2D2D2D] mb-1.5 block">Confirmer le mot de passe</label>
             <div className="relative">

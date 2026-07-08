@@ -75,7 +75,6 @@ export default function Utilisateurs() {
         </button>
       </div>
 
-      {/* Filtres + Recherche */}
       <div className="flex flex-col sm:flex-row gap-3 mb-6">
         <div className="relative flex-1">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -104,7 +103,6 @@ export default function Utilisateurs() {
         </div>
       </div>
 
-      {/* Tableau */}
       <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
         <table className="w-full text-sm">
           <thead>
@@ -136,10 +134,7 @@ export default function Utilisateurs() {
                 </td>
                 <td className="px-6 py-4">
                   <div className="flex gap-2">
-                    <button className="text-xs px-3 py-1.5 rounded-lg border border-gray-200 hover:bg-[#F8F4EE] transition-colors">
-                      Voir
-                    </button>
-                    <button 
+                    <button
                     onClick={() => handleDelete(u.id_users)}
                     className="text-xs px-3 py-1.5 rounded-lg border border-red-100 text-red-500 hover:bg-red-50 transition-colors">
                       Supprimer

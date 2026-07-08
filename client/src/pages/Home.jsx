@@ -36,12 +36,10 @@ export default function Home({ tutorielVu, setTutorielVu }) {
   return (
     <div>
 
-      {/* overlay tutoriel premiere connexion */}
       {!tutorielVu && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center px-4">
           <div className="bg-white rounded-2xl p-8 max-w-md w-full shadow-xl relative">
 
-            {/* fermer */}
             <button
               onClick={() => setTutorielVu(true)}
               className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
@@ -49,7 +47,6 @@ export default function Home({ tutorielVu, setTutorielVu }) {
               <X size={18} />
             </button>
 
-            {/* progression */}
             <div className="flex gap-1.5 mb-6">
               {etapesTutoriel.map((_, i) => (
                 <div
@@ -94,13 +91,11 @@ export default function Home({ tutorielVu, setTutorielVu }) {
         </div>
       )}
 
-      {/* contenu de la page */}
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-[#2D2D2D]">Bonjour 👋</h2>
         <p className="text-gray-500 text-sm mt-1">Que voulez-vous faire aujourd'hui ?</p>
       </div>
 
-      {/* raccourcis */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
         {[
           { label: 'Mes annonces', icone: Package, chemin: '/annonces', couleur: 'bg-[#2D6A4F]' },
@@ -126,7 +121,6 @@ export default function Home({ tutorielVu, setTutorielVu }) {
         })}
       </div>
 
-      {/* banniere eco */}
       <div className="bg-[#2D6A4F] rounded-xl p-5 flex items-center gap-4">
         <Leaf size={22} className="text-white shrink-0" />
         <p className="text-white text-sm font-medium italic">

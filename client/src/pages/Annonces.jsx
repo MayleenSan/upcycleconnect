@@ -23,7 +23,6 @@ export default function Annonces() {
   return (
     <div>
 
-      {/* header */}
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-2xl font-bold text-[#2D2D2D]">Annonces</h2>
@@ -38,7 +37,6 @@ export default function Annonces() {
         </button>
       </div>
 
-      {/* recherche + filtres */}
       <div className="flex flex-col sm:flex-row gap-3 mb-6">
         <div className="relative flex-1">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -67,7 +65,6 @@ export default function Annonces() {
         </div>
       </div>
 
-      {/* liste */}
       {filtrees.length === 0 ? (
         <div className="text-center text-gray-400 py-16 text-sm">Aucune annonce trouvée.</div>
       ) : (

@@ -11,4 +11,5 @@ type User struct {
 	CreatedAt string `json:"created_at"`
 	Role      string `json:"role"`
 	Language  string `json:"language"`
+	Verified  bool   `json:"verified"`
 }

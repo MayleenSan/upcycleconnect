@@ -81,7 +81,6 @@ export async function createCategorie(data) {
     body: JSON.stringify(data),
   })
   if (!response.ok) throw new Error('Erreur lors de la création')
-  return response.json()
 }
 
 export async function updateCategorie(id, data) {
@@ -113,7 +112,6 @@ export async function createEvenement(data) {
     body: JSON.stringify(data),
   })
   if (!response.ok) throw new Error('Erreur lors de la création')
-  return response.json()
 }
 
 export async function updateEvenement(id, data) {
@@ -126,18 +124,77 @@ export async function updateEvenement(id, data) {
   return response.json()
 }
 
+export async function getAnnonces() {
+  const response = await fetchAuth(`${BASE_URL}/annonces/`)
+  if (!response.ok) throw new Error('Erreur lors de la récupération des annonces')
+  return response.json()
+}
+
+export async function deleteAnnonce(id) {
+  const response = await fetchAuth(`${BASE_URL}/annonces/${id}`, { method: 'DELETE' })
+  if (!response.ok) throw new Error('Erreur lors de la suppression')
+  return response.json()
+}
+
+export async function createAnnonce(data) {
+  const response = await fetchAuth(`${BASE_URL}/annonces/`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  })
+  if (!response.ok) throw new Error('Erreur lors de la création')
+}
+
+export async function updateAnnonce(id, data) {
+  const response = await fetchAuth(`${BASE_URL}/annonces/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  })
+  if (!response.ok) throw new Error('Erreur lors de la mise à jour')
+  return response.json()
+}
+
+export async function getMesAnnonces() {
+  const response = await fetchAuth(`${BASE_URL}/mes-annonces/`)
+  if (!response.ok) throw new Error('Erreur lors de la récupération de tes annonces')
+  return response.json()
+}
+
+export async function createMonAnnonce(data) {
+  const response = await fetchAuth(`${BASE_URL}/mes-annonces/`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  })
+  if (!response.ok) throw new Error('Erreur lors de la création')
+}
+
 export async function login(mail,password){
   const response = await fetch('/api/auth/login',{
     method: 'POST',
     headers:{'Content-Type': 'application/json'},
     body: JSON.stringify({mail, password}),
   })
-  if (!response.ok) throw new Error('Identifiants incorrects')
+  if (!response.ok) {
+    const msg = await response.text()
+    throw new Error(msg || 'Identifiants incorrects')
+  }
   const data = await response.json()
-  localStorage.setItem('token', data.token)
+  sessionStorage.setItem('token', data.token)
+  sessionStorage.setItem('mail', mail)
+}
+
+export async function register(userData) {s
+  const response = await fetch('/api/auth/register', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(userData),
+  })
+  if (!response.ok) throw new Error("Erreur lors de l'inscription")
 }
 export async function fetchAuth(url, options = {}) {
-  const token = localStorage.getItem('token')
+  const token = sessionStorage.getItem('token')
 
   const headers = {
     ...options.headers,                      

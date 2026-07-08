@@ -1,3 +1,5 @@
+package models
+
 type Annonce struct {
     ID           int     `json:"id_annonce"`
     Titre        string  `json:"titre"`

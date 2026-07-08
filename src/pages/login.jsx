@@ -8,6 +8,7 @@ export default function Login() {
   const [password, setPassword] = useState('')
   const [erreur, setErreur] = useState('')
   const navigate = useNavigate()
+  const verifie = new URLSearchParams(window.location.search).get('verified') === '1'
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -16,9 +17,16 @@ export default function Login() {
     }
     try {
       await login(email, password)
-      navigate('/')
+      let role = ''
+      try {
+        const token = sessionStorage.getItem('token')
+        role = JSON.parse(atob(token.split('.')[1])).role
+      } catch {
+        role = ''
+      }
+      navigate(role === 'admin' ? '/' : '/espace')
     } catch (err) {
-      setErreur('Identifiants incorrects')
+      setErreur(err.message)
     }
   }
 
@@ -26,25 +34,27 @@ export default function Login() {
     <div className="min-h-screen bg-[#F8F4EE] flex items-center justify-center">
       <div className="w-full max-w-md">
 
-        {/* cogo */}
         <div className="flex flex-col items-center mb-8">
           <img src="/logo.png" alt="UpcycleConnect" className="w-16 h-16 object-contain mb-4" />
           <h1 className="text-2xl font-bold text-[#2D6A4F]">UpcycleConnect</h1>
           <p className="text-gray-500 text-sm mt-1">Espace administration</p>
         </div>
 
-        {/* card */}
         <div className="bg-white rounded-2xl border border-gray-100 p-8 shadow-sm">
           <h2 className="text-lg font-semibold text-[#2D2D2D] mb-6">Connexion</h2>
 
-          {/* Erreur */}
+          {verifie && (
+            <div className="mb-4 px-4 py-2.5 bg-green-50 border border-green-100 rounded-lg text-sm text-green-700">
+              Email vérifié ! Tu peux te connecter.
+            </div>
+          )}
+
           {erreur && (
             <div className="mb-4 px-4 py-2.5 bg-red-50 border border-red-100 rounded-lg text-sm text-red-500">
               {erreur}
             </div>
           )}
 
-          {/* mail */}
           <div className="mb-4">
             <label className="text-sm font-medium text-[#2D2D2D] mb-1.5 block">Email</label>
             <div className="relative">
@@ -59,7 +69,6 @@ export default function Login() {
             </div>
           </div>
 
-          {/* Mdp */}
           <div className="mb-6">
             <label className="text-sm font-medium text-[#2D2D2D] mb-1.5 block">Mot de passe</label>
             <div className="relative">
@@ -75,7 +84,6 @@ export default function Login() {
             </div>
           </div>
 
-          {/* Bouton */}
           <button
             onClick={handleLogin}
             className="w-full bg-[#2D6A4F] text-white py-2.5 rounded-lg text-sm font-medium hover:bg-[#245a42] transition-colors"

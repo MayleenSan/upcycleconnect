@@ -1,0 +1,10 @@
+# Contexte de build du front : on ne garde que ce qui sert à `npm run build`.
+node_modules
+dist
+.git
+.env
+backend
+client
+pro
+salaries
+**/*.log

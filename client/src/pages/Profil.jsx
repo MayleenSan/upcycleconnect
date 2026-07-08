@@ -26,13 +26,11 @@ export default function Profil() {
   return (
     <div>
 
-      {/* header */}
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-[#2D2D2D]">Mon Profil</h2>
         <p className="text-gray-500 text-sm mt-0.5">Gérer tes informations personnelles</p>
       </div>
 
-      {/* avatar */}
       <div className="bg-white rounded-2xl border border-gray-100 p-6 mb-4 flex items-center gap-4">
         <div className="w-16 h-16 rounded-full bg-[#2D6A4F] flex items-center justify-center text-white text-2xl font-bold shrink-0">
           {form.prenom[0]}{form.nom[0]}
@@ -52,11 +50,9 @@ export default function Profil() {
         </div>
       )}
 
-      {/* formulaire */}
       <div className="bg-white rounded-2xl border border-gray-100 p-6 mb-4">
         <h3 className="font-semibold text-[#2D2D2D] mb-5">Informations personnelles</h3>
 
-        {/* prenom + nom */}
         <div className="flex gap-3 mb-4">
           <div className="flex-1">
             <label className="text-sm font-medium text-[#2D2D2D] mb-1.5 block">Prénom</label>
@@ -83,7 +79,6 @@ export default function Profil() {
           </div>
         </div>
 
-        {/* email */}
         <div className="mb-4">
           <label className="text-sm font-medium text-[#2D2D2D] mb-1.5 block">Email</label>
           <div className="relative">
@@ -98,7 +93,6 @@ export default function Profil() {
           </div>
         </div>
 
-        {/* telephone */}
         <div className="mb-4">
           <label className="text-sm font-medium text-[#2D2D2D] mb-1.5 block">Téléphone</label>
           <div className="relative">
@@ -113,7 +107,6 @@ export default function Profil() {
           </div>
         </div>
 
-        {/* ville */}
         <div className="mb-6">
           <label className="text-sm font-medium text-[#2D2D2D] mb-1.5 block">Ville</label>
           <div className="relative">
@@ -137,7 +130,6 @@ export default function Profil() {
         </button>
       </div>
 
-      {/* deconnexion */}
       <div className="bg-white rounded-2xl border border-gray-100 p-6">
         <h3 className="font-semibold text-[#2D2D2D] mb-1">Déconnexion</h3>
         <p className="text-gray-400 text-sm mb-4">Tu seras redirigé vers la page de connexion.</p>

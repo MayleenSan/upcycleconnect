@@ -25,7 +25,6 @@ export default function Layout({ children }) {
   return (
     <div className="min-h-screen bg-[#F8F4EE] flex">
 
-      {/* sidebar desktop */}
       <aside className="hidden md:flex flex-col w-60 bg-white border-r border-gray-100 fixed h-full">
         <div className="p-5 border-b border-gray-100 flex items-center gap-3">
           <img src="/logo.png" alt="logo" className="w-8 h-8 object-contain" />
@@ -62,7 +61,6 @@ export default function Layout({ children }) {
         </div>
       </aside>
 
-      {/* header mobile */}
       <div className="md:hidden fixed top-0 left-0 right-0 bg-white border-b border-gray-100 z-20 px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <img src="/logo.png" alt="logo" className="w-7 h-7 object-contain" />
@@ -73,7 +71,6 @@ export default function Layout({ children }) {
         </button>
       </div>
 
-      {/* menu mobile */}
       {menuOuvert && (
         <div className="md:hidden fixed inset-0 bg-white z-10 pt-16 px-4">
           <nav className="flex flex-col gap-1">
@@ -95,7 +92,6 @@ export default function Layout({ children }) {
         </div>
       )}
 
-      {/* contenu */}
       <main className="flex-1 md:ml-60 pt-4 md:pt-0">
         <div className="p-6 md:p-8">
           {children}

@@ -35,13 +35,11 @@ export default function UpcyclingScore() {
   return (
     <div>
 
-      {/* header */}
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-[#2D2D2D]">Mon Upcycling Score</h2>
         <p className="text-gray-500 text-sm mt-0.5">Ton impact environnemental en un coup d'oeil</p>
       </div>
 
-      {/* score principal */}
       <div className="bg-white rounded-2xl border border-gray-100 p-8 flex flex-col items-center mb-6">
         <div className="relative flex items-center justify-center w-40 h-40 mb-4">
           <svg className="w-40 h-40 -rotate-90" viewBox="0 0 100 100">
@@ -64,7 +62,6 @@ export default function UpcyclingScore() {
         </p>
       </div>
 
-      {/* stats */}
       <div className="grid grid-cols-2 gap-4 mb-6">
         {stats.map(stat => {
           const Icone = stat.icone
@@ -82,7 +79,6 @@ export default function UpcyclingScore() {
         })}
       </div>
 
-      {/* historique */}
       <div className="bg-white rounded-xl border border-gray-100 p-5">
         <h3 className="font-semibold text-[#2D2D2D] mb-4">Évolution du score</h3>
         <div className="flex items-end gap-3 h-28">

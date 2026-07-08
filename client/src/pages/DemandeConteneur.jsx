@@ -11,7 +11,7 @@ const conteneurs = [
 
 export default function DemandeConteneur() {
   const [form, setForm] = useState({ objet: '', description: '', conteneur: '' })
-  const [etape, setEtape] = useState(1) // 1 = formulaire, 2 = confirmation
+  const [etape, setEtape] = useState(1)
   const navigate = useNavigate()
 
   const handleChange = e => {
@@ -23,13 +23,11 @@ export default function DemandeConteneur() {
     setEtape(2)
   }
 
-  // code barre fictif
   const codeBarreFactice = 'UPC-' + Math.random().toString(36).substring(2, 8).toUpperCase()
 
   return (
     <div>
 
-      {/* header */}
       <div className="flex items-center gap-3 mb-6">
         <button
           onClick={() => navigate('/annonces')}
@@ -46,7 +44,6 @@ export default function DemandeConteneur() {
       {etape === 1 && (
         <div className="bg-white rounded-2xl border border-gray-100 p-6">
 
-          {/* info */}
           <div className="bg-[#F8F4EE] rounded-xl p-4 mb-6 flex gap-3">
             <Archive size={18} className="text-[#2D6A4F] shrink-0 mt-0.5" />
             <p className="text-sm text-gray-600">
@@ -55,7 +52,6 @@ export default function DemandeConteneur() {
             </p>
           </div>
 
-          {/* nom objet */}
           <div className="mb-5">
             <label className="text-sm font-medium text-[#2D2D2D] mb-1.5 block">Nom de l'objet</label>
             <input
@@ -68,7 +64,6 @@ export default function DemandeConteneur() {
             />
           </div>
 
-          {/* description */}
           <div className="mb-5">
             <label className="text-sm font-medium text-[#2D2D2D] mb-1.5 block">Description et état</label>
             <textarea
@@ -81,7 +76,6 @@ export default function DemandeConteneur() {
             />
           </div>
 
-          {/* choix conteneur */}
           <div className="mb-6">
             <label className="text-sm font-medium text-[#2D2D2D] mb-3 block">Choisir un conteneur</label>
             <div className="flex flex-col gap-3">
@@ -119,7 +113,6 @@ export default function DemandeConteneur() {
         </div>
       )}
 
-      {/* confirmation + code barre */}
       {etape === 2 && (
         <div className="bg-white rounded-2xl border border-gray-100 p-8 text-center">
           <div className="flex items-center justify-center w-16 h-16 bg-green-50 rounded-2xl mx-auto mb-5">
@@ -130,7 +123,6 @@ export default function DemandeConteneur() {
             Notre équipe va vérifier ton objet. Voici ton code de dépôt :
           </p>
 
-          {/* code barre */}
           <div className="bg-[#F8F4EE] rounded-xl p-5 mb-6 inline-block w-full">
             <p className="text-xs text-gray-400 mb-2">Code de dépôt</p>
             <p className="text-2xl font-bold text-[#2D6A4F] tracking-widest">{codeBarreFactice}</p>

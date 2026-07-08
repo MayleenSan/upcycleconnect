@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { getEvenements, createEvenement } from '../services/api'
+import { getEvenements, createEvenement, deleteEvenement } from '../services/api'
 import { Search, Plus, MapPin, Calendar, Users, X } from 'lucide-react'
 
 export default function Evenements() {
@@ -35,6 +35,13 @@ export default function Evenements() {
       alert('Erreur : ' + err.message)
     } finally {
       setSubmitting(false)
+    }
+  }
+
+  const handleDelete = async (id) => {
+    if (window.confirm('Supprimer cet événement ?')) {
+      try { await deleteEvenement(id); charger() }
+      catch (err) { alert('Erreur : ' + err.message) }
     }
   }
 
@@ -122,8 +129,7 @@ export default function Evenements() {
               )}
             </div>
             <div className="flex gap-2">
-              <button className="text-xs px-3 py-1.5 rounded-lg border border-gray-200 hover:bg-[#F8F4EE] transition-colors">Modifier</button>
-              <button className="text-xs px-3 py-1.5 rounded-lg border border-red-100 text-red-500 hover:bg-red-50 transition-colors">Supprimer</button>
+              <button onClick={() => handleDelete(e.id_evenement)} className="text-xs px-3 py-1.5 rounded-lg border border-red-100 text-red-500 hover:bg-red-50 transition-colors">Supprimer</button>
             </div>
           </div>
         ))}

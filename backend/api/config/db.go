@@ -14,16 +14,11 @@ import (
 var DB *sql.DB
 
 func ConnectDB() {
-	err := godotenv.Load()
-	
-	if err != nil {
-		log.Fatal("Erreur : Impossible de charger le fichier .env")
-	}
+	_ = godotenv.Load()
 
-	
 	connStr := os.Getenv("DB_URL")
-	
-	
+
+	var err error
 	DB, err = sql.Open("postgres", connStr)
 	if err != nil {
 		log.Fatal("Erreur d'ouverture : ", err)

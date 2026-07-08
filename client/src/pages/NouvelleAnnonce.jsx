@@ -26,7 +26,6 @@ export default function NouvelleAnnonce() {
   return (
     <div>
 
-      {/* header */}
       <div className="flex items-center gap-3 mb-6">
         <button
           onClick={() => navigate('/annonces')}
@@ -48,7 +47,6 @@ export default function NouvelleAnnonce() {
 
       <div className="bg-white rounded-2xl border border-gray-100 p-6">
 
-        {/* titre */}
         <div className="mb-5">
           <label className="text-sm font-medium text-[#2D2D2D] mb-1.5 block">Titre de l'annonce</label>
           <input
@@ -61,7 +59,6 @@ export default function NouvelleAnnonce() {
           />
         </div>
 
-        {/* categorie + type */}
         <div className="flex gap-4 mb-5">
           <div className="flex-1">
             <label className="text-sm font-medium text-[#2D2D2D] mb-1.5 block">Catégorie</label>
@@ -99,7 +96,6 @@ export default function NouvelleAnnonce() {
           </div>
         </div>
 
-        {/* localisation */}
         <div className="mb-5">
           <label className="text-sm font-medium text-[#2D2D2D] mb-1.5 block">Localisation</label>
           <input
@@ -112,7 +108,6 @@ export default function NouvelleAnnonce() {
           />
         </div>
 
-        {/* description */}
         <div className="mb-5">
           <label className="text-sm font-medium text-[#2D2D2D] mb-1.5 block">Description</label>
           <textarea
@@ -125,7 +120,6 @@ export default function NouvelleAnnonce() {
           />
         </div>
 
-        {/* photo */}
         <div className="mb-6">
           <label className="text-sm font-medium text-[#2D2D2D] mb-1.5 block">Photo (optionnel)</label>
           <div className="border-2 border-dashed border-gray-200 rounded-lg p-6 flex flex-col items-center gap-2 text-gray-400 hover:border-[#74C69D] transition-colors cursor-pointer">

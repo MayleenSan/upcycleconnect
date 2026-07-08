@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { getPrestations, createPrestation } from '../services/api'
+import { getPrestations, createPrestation, deletePrestation } from '../services/api'
 import { Search, Plus, CheckCircle, XCircle, X } from 'lucide-react'
 
 export default function Prestations() {
@@ -39,6 +39,13 @@ export default function Prestations() {
       alert('Erreur : ' + err.message)
     } finally {
       setSubmitting(false)
+    }
+  }
+
+  const handleDelete = async (id) => {
+    if (window.confirm('Supprimer cette prestation ?')) {
+      try { await deletePrestation(id); charger() }
+      catch (err) { alert('Erreur : ' + err.message) }
     }
   }
 
@@ -117,8 +124,7 @@ export default function Prestations() {
                 </td>
                 <td className="px-6 py-4">
                   <div className="flex gap-2">
-                    <button className="text-xs px-3 py-1.5 rounded-lg border border-gray-200 hover:bg-[#F8F4EE] transition-colors">Voir</button>
-                    <button className="text-xs px-3 py-1.5 rounded-lg border border-red-100 text-red-500 hover:bg-red-50 transition-colors">Supprimer</button>
+                    <button onClick={() => handleDelete(p.id_prestation)} className="text-xs px-3 py-1.5 rounded-lg border border-red-100 text-red-500 hover:bg-red-50 transition-colors">Supprimer</button>
                   </div>
                 </td>
               </tr>

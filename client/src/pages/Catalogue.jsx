@@ -36,13 +36,11 @@ export default function Catalogue() {
   return (
     <div>
 
-      {/* header */}
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-[#2D2D2D]">Catalogue</h2>
         <p className="text-gray-500 text-sm mt-0.5">Formations, ateliers et événements</p>
       </div>
 
-      {/* filtres */}
       <div className="flex gap-2 mb-6 flex-wrap">
         {filtres.map(f => (
           <button
@@ -59,7 +57,6 @@ export default function Catalogue() {
         ))}
       </div>
 
-      {/* grille */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {filtres_items.map(item => (
           <div
@@ -85,7 +82,6 @@ export default function Catalogue() {
         ))}
       </div>
 
-      {/* modal detail */}
       {selected && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center px-4">
           <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-xl relative">
