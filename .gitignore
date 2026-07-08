@@ -27,3 +27,9 @@ backend/api/.env
 node_modules/
 dist/
 backend/api/api
+
+backend/api/.env
+backend/api/api
+.env
+node_modules/
+dist/
