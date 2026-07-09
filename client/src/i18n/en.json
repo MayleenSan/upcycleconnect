@@ -1,0 +1,38 @@
+{
+  "nav": {
+    "accueil": "Home",
+    "annonces": "Listings",
+    "deposer": "Drop an item",
+    "conteneur": "Container",
+    "catalogue": "Catalogue",
+    "score": "My score",
+    "conseils": "Tips",
+    "planning": "Schedule",
+    "profil": "My profile",
+    "deconnexion": "Log out"
+  },
+  "login": {
+    "titre": "Sign in",
+    "email": "Email",
+    "mdp": "Password",
+    "bouton": "Sign in",
+    "inscription": "Don't have an account?",
+    "lien_inscription": "Sign up",
+    "erreur_champs": "Please fill in all fields.",
+    "erreur_credentials": "Incorrect email or password."
+  },
+  "register": {
+    "titre": "Create account",
+    "nom": "Last name",
+    "prenom": "First name",
+    "email": "Email",
+    "mdp": "Password",
+    "confirmer": "Confirm password",
+    "bouton": "Create my account",
+    "deja_compte": "Already have an account?",
+    "lien_connexion": "Sign in",
+    "erreur_champs": "Please fill in all fields.",
+    "erreur_mdp": "Passwords do not match.",
+    "erreur_api": "Could not create account."
+  }
+}

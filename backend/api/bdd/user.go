@@ -8,7 +8,7 @@ import (
 
 func GetUserByMail(email string)(models.User, error){
 	var user models.User
-	query:=`SELECT id_users, first_name, last_name, mail, password, phone, address, crated_at, role, language FROM "users" WHERE mail=$1`
+	query:=`SELECT id_users, first_name, last_name, mail, password, phone, address, created_at, role, language FROM "users" WHERE mail=$1`
 	err := config.DB.QueryRow(query, email).Scan(
 		&user.ID,
 		&user.FirstName,
@@ -109,5 +109,3 @@ func UpdateUser(id int, user models.User)error{
 	}
 	return nil
 }
-
-

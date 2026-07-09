@@ -1,0 +1,38 @@
+{
+  "nav": {
+    "accueil": "Accueil",
+    "annonces": "Annonces",
+    "deposer": "Déposer un objet",
+    "conteneur": "Conteneur",
+    "catalogue": "Catalogue",
+    "score": "Mon score",
+    "conseils": "Conseils",
+    "planning": "Planning",
+    "profil": "Mon profil",
+    "deconnexion": "Déconnexion"
+  },
+  "login": {
+    "titre": "Connexion",
+    "email": "Email",
+    "mdp": "Mot de passe",
+    "bouton": "Se connecter",
+    "inscription": "Pas encore de compte ?",
+    "lien_inscription": "S'inscrire",
+    "erreur_champs": "Remplis tous les champs.",
+    "erreur_credentials": "Email ou mot de passe incorrect."
+  },
+  "register": {
+    "titre": "Inscription",
+    "nom": "Nom",
+    "prenom": "Prénom",
+    "email": "Email",
+    "mdp": "Mot de passe",
+    "confirmer": "Confirmer le mot de passe",
+    "bouton": "Créer mon compte",
+    "deja_compte": "Déjà un compte ?",
+    "lien_connexion": "Se connecter",
+    "erreur_champs": "Remplis tous les champs.",
+    "erreur_mdp": "Les mots de passe ne correspondent pas.",
+    "erreur_api": "Impossible de créer le compte."
+  }
+}

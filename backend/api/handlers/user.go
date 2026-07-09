@@ -12,7 +12,41 @@ import (
 
 	"golang.org/x/crypto/bcrypt"
 )
-func GetUserByMail(w http.ResponseWriter, r *http.Request){
+
+func Login(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var credentials struct {
+		Mail     string `json:"mail"`
+		Password string `json:"password"`
+	}
+	err := json.NewDecoder(r.Body).Decode(&credentials)
+	if err != nil {
+		http.Error(w, "Invalid JSON payload", http.StatusBadRequest)
+		return
+	}
+
+	user, err := bdd.GetUserByMail(credentials.Mail)
+	if err != nil {
+		http.Error(w, "Identifiants invalides", http.StatusUnauthorized)
+		return
+	}
+
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(credentials.Password))
+	if err != nil {
+		http.Error(w, "Identifiants invalides", http.StatusUnauthorized)
+		return
+	}
+
+	user.Password = ""
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{"user": user})
+}
+
+func GetUserByMail(w http.ResponseWriter, r *http.Request) {
 	email := strings.TrimPrefix(r.URL.Path, "/api/users/email/")
 	if email == "" {
 		http.Error(w, "Email missing in URL", http.StatusBadRequest)
@@ -23,23 +57,29 @@ func GetUserByMail(w http.ResponseWriter, r *http.Request){
 		http.Error(w, "User not found", http.StatusNotFound)
 		return
 	}
-	w.Header().Set("Content-Type","application/json")
-	err = json.NewEncoder(w).Encode(user)
+	user.Password = ""
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(user)
 }
+
 func GetUsers(w http.ResponseWriter, r *http.Request) {
 	users, err := bdd.GetAllUsers()
-	if err != nil{
-		http.Error(w,"Error fetching users", http.StatusInternalServerError)
+	if err != nil {
+		http.Error(w, "Error fetching users", http.StatusInternalServerError)
 		return
 	}
-	w.Header().Set("Content-Type","application/json")
-	err = json.NewEncoder(w).Encode(users)
+	for i := range users {
+		users[i].Password = ""
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(users)
 }
-func CreateUser(w http.ResponseWriter, r *http.Request){
+
+func CreateUser(w http.ResponseWriter, r *http.Request) {
 	var newUser models.User
 	err := json.NewDecoder(r.Body).Decode(&newUser)
-	if err != nil{
-		http.Error(w,"Invalid JSON payload",http.StatusBadRequest)
+	if err != nil {
+		http.Error(w, "Invalid JSON payload", http.StatusBadRequest)
 		return
 	}
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(newUser.Password), bcrypt.DefaultCost)
@@ -53,10 +93,11 @@ func CreateUser(w http.ResponseWriter, r *http.Request){
 		http.Error(w, "Failed to create user in database", http.StatusInternalServerError)
 		return
 	}
-	w.Header().Set("Content-Type","application/json")
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 }
-func UpdateUser(w http.ResponseWriter, r *http.Request){
+
+func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	idStr := strings.TrimPrefix(r.URL.Path, "/api/users/")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
@@ -66,10 +107,8 @@ func UpdateUser(w http.ResponseWriter, r *http.Request){
 	var updateuser models.User
 	err = json.NewDecoder(r.Body).Decode(&updateuser)
 	if err != nil {
-		http.Error(w,"Invalid JSON payload",http.StatusBadRequest)
+		http.Error(w, "Invalid JSON payload", http.StatusBadRequest)
 		return
-
-
 	}
 	err = bdd.UpdateUser(id, updateuser)
 	if err != nil {
@@ -78,17 +117,17 @@ func UpdateUser(w http.ResponseWriter, r *http.Request){
 	}
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{"message": "✅ User successfully updated!"})
-
 }
-func DeleteUser(w http.ResponseWriter, r *http.Request){
+
+func DeleteUser(w http.ResponseWriter, r *http.Request) {
 	idStr := strings.TrimPrefix(r.URL.Path, "/api/users/")
-	id, err := strconv.Atoi(idStr) 
+	id, err := strconv.Atoi(idStr)
 	if err != nil {
-		http.Error(w,"Invalid user ID in URL", http.StatusBadRequest)
+		http.Error(w, "Invalid user ID in URL", http.StatusBadRequest)
 		return
 	}
 	err = bdd.DeleteUser(id)
-	if err != nil{
+	if err != nil {
 		http.Error(w, "failed to delete user", http.StatusInternalServerError)
 		return
 	}

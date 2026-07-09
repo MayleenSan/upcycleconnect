@@ -21,9 +21,17 @@ const etapesTutoriel = [
   },
 ]
 
-export default function Home({ tutorielVu, setTutorielVu }) {
+export default function Home() {
   const [etape, setEtape] = useState(0)
+  const [tutorielVu, setTutorielVuState] = useState(() => {
+    return localStorage.getItem('uc_tutoriel_vu') === 'true'
+  })
   const navigate = useNavigate()
+
+  const setTutorielVu = (valeur) => {
+    localStorage.setItem('uc_tutoriel_vu', String(valeur))
+    setTutorielVuState(valeur)
+  }
 
   const etapeSuivante = () => {
     if (etape < etapesTutoriel.length - 1) {

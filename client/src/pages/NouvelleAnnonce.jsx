@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ArrowLeft, Upload } from 'lucide-react'
 
+const API = import.meta.env.VITE_API_URL || 'http://localhost:8085'
+
 export default function NouvelleAnnonce() {
   const [form, setForm] = useState({
     titre: '',
@@ -11,16 +13,47 @@ export default function NouvelleAnnonce() {
     description: '',
   })
   const [succes, setSucces] = useState(false)
+  const [erreur, setErreur] = useState('')
+  const [envoi, setEnvoi] = useState(false)
   const navigate = useNavigate()
 
   const handleChange = e => {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
-  const handleSubmit = () => {
-    if (!form.titre || !form.categorie || !form.localisation || !form.description) return
-    setSucces(true)
-    setTimeout(() => navigate('/annonces'), 2000)
+  const handleSubmit = async () => {
+    if (!form.titre || !form.categorie || !form.localisation || !form.description) {
+      setErreur('Merci de remplir tous les champs obligatoires.')
+      return
+    }
+
+    setEnvoi(true)
+    setErreur('')
+
+    const uUser = localStorage.getItem('uc_user')
+    const idUser = uUser ? JSON.parse(uUser).id_users : null
+
+    try {
+      const res = await fetch(`${API}/api/annonces/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id_users: idUser,
+          titre: form.titre,
+          categorie: form.categorie,
+          type: form.type,
+          localisation: form.localisation,
+          description: form.description,
+        }),
+      })
+      if (!res.ok) throw new Error()
+      setSucces(true)
+      setTimeout(() => navigate('/annonces'), 1500)
+    } catch {
+      setErreur("Impossible de déposer l'annonce. Le serveur est-il lancé ?")
+    } finally {
+      setEnvoi(false)
+    }
   }
 
   return (
@@ -43,6 +76,12 @@ export default function NouvelleAnnonce() {
       {succes && (
         <div className="mb-6 px-4 py-3 bg-green-50 border border-green-100 rounded-lg text-sm text-green-600">
           Annonce déposée ! Redirection en cours...
+        </div>
+      )}
+
+      {erreur && (
+        <div className="mb-6 px-4 py-3 bg-red-50 border border-red-100 rounded-lg text-sm text-red-500">
+          {erreur}
         </div>
       )}
 
@@ -136,9 +175,10 @@ export default function NouvelleAnnonce() {
 
         <button
           onClick={handleSubmit}
-          className="w-full bg-[#2D6A4F] text-white py-2.5 rounded-lg text-sm font-medium hover:bg-[#245a42] transition-colors"
+          disabled={envoi}
+          className="w-full bg-[#2D6A4F] text-white py-2.5 rounded-lg text-sm font-medium hover:bg-[#245a42] transition-colors disabled:opacity-60"
         >
-          Déposer l'annonce
+          {envoi ? 'Envoi...' : "Déposer l'annonce"}
         </button>
 
       </div>
